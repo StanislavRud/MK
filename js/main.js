@@ -4,7 +4,7 @@ const randomBtn = document.querySelector('.button');
 const player1 = {
     player: 1,
     name: 'SCORPION',
-    hp: 80,
+    hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/scorpion.gif',
     weapon: ['Dildo', 'knife', 'gun', 'nunchaki'],
     attack: () => {
@@ -15,7 +15,7 @@ const player1 = {
 const player2 = {
     player: 2,
     name: 'KITANA',
-    hp: 90,
+    hp: 100,
     img: 'http://reactmarathon-api.herokuapp.com/assets/kitana.gif',
     weapon: ['Dildo', 'knife', 'gun', 'nunchaki'],
     attack: () => {
@@ -60,29 +60,48 @@ createPlayer(player1);
 createPlayer(player2);
 
 
+const random = () => {
+    let minusLife = Math.floor(Math.random() * 20)
+    return minusLife
+}
+
 const playerLose = (name) => {
     const loseTitle = createNewElement('div', 'loseTitle');
-    loseTitle.innerText = name + ' lose';
-    return
-        loseTitle
-        
+    loseTitle.innerText = name + ' win';
+    return loseTitle
 }
+
+
 
 const changeHP = (player) => {
     const playerLife = document.querySelector('.player'+ player.player +' .life')
-    player.hp = player.hp - 20;
+    if (player.hp <= 0) {
+        player.hp = 0;
+    } else {
+        player.hp = player.hp - random();
+    }
     playerLife.style.width = player.hp + '%'
     const arenas = document.querySelector('.arenas');
 
-        if (player.hp < 0) {
-           return arenas.appendChild(playerLose(player.name));
-        } 
-    
+        if (player1.hp == 0) {
+
+           return (
+               arenas.appendChild(playerLose(player2.name)),
+               randomBtn.disabled = true
+            )
+
+        } else if (player2.hp == 0) {
+
+            return (
+                arenas.appendChild(playerLose(player1.name)),
+                randomBtn.disabled = true
+             )
+        }
 }
 
 randomBtn.addEventListener('click', () => {
-    changeHP(player1)
-    //changeHP(player2)
+    changeHP(player1),
+    changeHP(player2)
 })
 
 
